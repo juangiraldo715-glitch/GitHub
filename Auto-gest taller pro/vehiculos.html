@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehículos - AutoGest Taller Pro</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-mini">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <h2>AutoGest</h2>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="dashboard.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="clientes.html">
+                            <i class="fas fa-users"></i>
+                            <span>Clientes</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="vehiculos.html">
+                            <i class="fas fa-car"></i>
+                            <span>Vehículos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ordenes.html">
+                            <i class="fas fa-clipboard-list"></i>
+                            <span>Órdenes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="configuracion.html">
+                            <i class="fas fa-cog"></i>
+                            <span>Configuración</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <p class="user-name">Juan Recepcionista</p>
+                        <p class="user-role">Recepcionista</p>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Gestión de Vehículos</h1>
+                <div class="header-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Filtros y acciones -->
+                <div class="filters-bar">
+                    <div class="search-input-group">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchVehicle" placeholder="Buscar por placa, marca, modelo, cliente...">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <select id="filterClient">
+                            <option value="">Todos los clientes</option>
+                        </select>
+                        
+                        <select id="filterYear">
+                            <option value="">Todos los años</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="openVehicleModal()">
+                        <i class="fas fa-plus"></i> Nuevo Vehículo
+                    </button>
+                </div>
+
+                <!-- Vista selector -->
+                <div class="view-toggle">
+                    <button class="view-btn active" onclick="toggleView('grid')">
+                        <i class="fas fa-th-large"></i> Grid
+                    </button>
+                    <button class="view-btn" onclick="toggleView('table')">
+                        <i class="fas fa-list"></i> Tabla
+                    </button>
+                </div>
+
+                <!-- Grid View -->
+                <div id="gridView" class="vehicles-grid">
+                    <!-- Los vehículos se cargarán con JavaScript -->
+                </div>
+
+                <!-- Table View -->
+                <div id="tableView" class="table-responsive" style="display: none;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Placa</th>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>Año</th>
+                                <th>Color</th>
+                                <th>Cliente</th>
+                                <th>Kilometraje</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vehiclesTableBody">
+                            <!-- Datos cargados por JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para nuevo vehículo -->
+    <div id="vehicleModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Registrar Nuevo Vehículo</h3>
+                <button class="close-modal" onclick="closeVehicleModal()">&times;</button>
+            </div>
+            <form id="vehicleForm" class="modal-form">
+                <div class="form-group">
+                    <label>Placa *</label>
+                    <input type="text" id="plate" required placeholder="ABC-123">
+                    <small>Formato: ABC-123</small>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Marca *</label>
+                        <input type="text" id="brand" required placeholder="Toyota">
+                    </div>
+                    <div class="form-group">
+                        <label>Modelo *</label>
+                        <input type="text" id="model" required placeholder="Hilux">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Año *</label>
+                        <input type="number" id="year" required min="1990" max="2026" placeholder="2023">
+                    </div>
+                    <div class="form-group">
+                        <label>Color</label>
+                        <input type="text" id="color" placeholder="Blanco">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Kilometraje</label>
+                    <input type="number" id="mileage" min="0" placeholder="15000">
+                </div>
+                
+                <div class="form-group">
+                    <label>Cliente Propietario *</label>
+                    <select id="ownerClient" required>
+                        <option value="">Seleccione un cliente...</option>
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeVehicleModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Guardar Vehículo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

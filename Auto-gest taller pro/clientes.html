@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - AutoGest Taller Pro</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-mini">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <h2>AutoGest</h2>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="dashboard.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="clientes.html">
+                            <i class="fas fa-users"></i>
+                            <span>Clientes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="vehiculos.html">
+                            <i class="fas fa-car"></i>
+                            <span>Vehículos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ordenes.html">
+                            <i class="fas fa-clipboard-list"></i>
+                            <span>Órdenes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="configuracion.html">
+                            <i class="fas fa-cog"></i>
+                            <span>Configuración</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <p class="user-name">Juan Recepcionista</p>
+                        <p class="user-role">Recepcionista</p>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Gestión de Clientes</h1>
+                <div class="header-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Barra de búsqueda y acciones -->
+                <div class="search-bar">
+                    <div class="search-input-group">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchClient" placeholder="Buscar cliente por NIT, nombre...">
+                    </div>
+                    <button class="btn-primary" onclick="openClientModal()">
+                        <i class="fas fa-plus"></i> Nuevo Cliente
+                    </button>
+                </div>
+
+                <!-- Tabla de clientes -->
+                <div class="table-responsive">
+                    <table class="data-table" id="clientsTable">
+                        <thead>
+                            <tr>
+                                <th>NIT</th>
+                                <th>Nombre</th>
+                                <th>Representante</th>
+                                <th>Teléfono</th>
+                                <th>Tipo Entidad</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientsTableBody">
+                            <!-- Datos cargados por JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para nuevo cliente -->
+    <div id="clientModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nuevo Cliente</h3>
+                <button class="close-modal" onclick="closeClientModal()">&times;</button>
+            </div>
+            <form id="clientForm" class="modal-form">
+                <div class="form-group">
+                    <label>NIT *</label>
+                    <input type="text" id="nit" required placeholder="123456789-1">
+                    <small>Formato: 123456789-1</small>
+                </div>
+                <div class="form-group">
+                    <label>Nombre Entidad *</label>
+                    <input type="text" id="entityName" required placeholder="Ej: Alcaldía de Bogotá">
+                </div>
+                <div class="form-group">
+                    <label>Representante Legal *</label>
+                    <input type="text" id="legalRep" required placeholder="Nombre completo">
+                </div>
+                <div class="form-group">
+                    <label>Teléfono *</label>
+                    <input type="tel" id="phone" required placeholder="6012345678">
+                </div>
+                <div class="form-group">
+                    <label>Tipo Entidad *</label>
+                    <select id="entityType" required>
+                        <option value="">Seleccione...</option>
+                        <option value="Alcaldía">Alcaldía</option>
+                        <option value="Gobernación">Gobernación</option>
+                        <option value="Ministerio">Ministerio</option>
+                        <option value="Instituto">Instituto</option>
+                        <option value="Empresa">Empresa</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="contacto@entidad.gov.co">
+                </div>
+                <div class="form-group">
+                    <label>Dirección</label>
+                    <input type="text" id="address" placeholder="Dirección completa">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeClientModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

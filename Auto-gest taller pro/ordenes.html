@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Órdenes de Servicio - AutoGest Taller Pro</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-mini">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <h2>AutoGest</h2>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="dashboard.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="clientes.html">
+                            <i class="fas fa-users"></i>
+                            <span>Clientes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="vehiculos.html">
+                            <i class="fas fa-car"></i>
+                            <span>Vehículos</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="ordenes.html">
+                            <i class="fas fa-clipboard-list"></i>
+                            <span>Órdenes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="configuracion.html">
+                            <i class="fas fa-cog"></i>
+                            <span>Configuración</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <p class="user-name">Juan Recepcionista</p>
+                        <p class="user-role">Recepcionista</p>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Gestión de Órdenes de Servicio</h1>
+                <div class="header-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">5</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Filtros y acciones -->
+                <div class="orders-filters">
+                    <div class="search-input-group">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchOrder" placeholder="Buscar por #orden, vehículo, cliente...">
+                    </div>
+                    
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="filterOrders('all')">Todas</button>
+                        <button class="filter-btn" onclick="filterOrders('recibido')">Recibido</button>
+                        <button class="filter-btn" onclick="filterOrders('diagnostico')">En diagnóstico</button>
+                        <button class="filter-btn" onclick="filterOrders('reparacion')">En reparación</button>
+                        <button class="filter-btn" onclick="filterOrders('completado')">Completadas</button>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="openOrderModal()">
+                        <i class="fas fa-plus"></i> Nueva Orden
+                    </button>
+                </div>
+
+                <!-- Kanban Board -->
+                <div class="kanban-board">
+                    <!-- Columna: Recibido -->
+                    <div class="kanban-column" data-status="recibido">
+                        <div class="column-header">
+                            <h3><i class="fas fa-inbox"></i> Recibido</h3>
+                            <span class="order-count" id="count-recibido">0</span>
+                        </div>
+                        <div class="column-content" id="column-recibido" ondragover="allowDrop(event)" ondrop="dropOrder(event)">
+                            <!-- Órdenes cargadas por JS -->
+                        </div>
+                    </div>
+
+                    <!-- Columna: En diagnóstico -->
+                    <div class="kanban-column" data-status="diagnostico">
+                        <div class="column-header">
+                            <h3><i class="fas fa-stethoscope"></i> En diagnóstico</h3>
+                            <span class="order-count" id="count-diagnostico">0</span>
+                        </div>
+                        <div class="column-content" id="column-diagnostico" ondragover="allowDrop(event)" ondrop="dropOrder(event)">
+                            <!-- Órdenes cargadas por JS -->
+                        </div>
+                    </div>
+
+                    <!-- Columna: En reparación -->
+                    <div class="kanban-column" data-status="reparacion">
+                        <div class="column-header">
+                            <h3><i class="fas fa-tools"></i> En reparación</h3>
+                            <span class="order-count" id="count-reparacion">0</span>
+                        </div>
+                        <div class="column-content" id="column-reparacion" ondragover="allowDrop(event)" ondrop="dropOrder(event)">
+                            <!-- Órdenes cargadas por JS -->
+                        </div>
+                    </div>
+
+                    <!-- Columna: Completado -->
+                    <div class="kanban-column" data-status="completado">
+                        <div class="column-header">
+                            <h3><i class="fas fa-check-circle"></i> Completado</h3>
+                            <span class="order-count" id="count-completado">0</span>
+                        </div>
+                        <div class="column-content" id="column-completado" ondragover="allowDrop(event)" ondrop="dropOrder(event)">
+                            <!-- Órdenes cargadas por JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para nueva orden -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Nueva Orden de Servicio</h3>
+                <button class="close-modal" onclick="closeOrderModal()">&times;</button>
+            </div>
+            <form id="orderForm" class="modal-form">
+                <div class="form-group">
+                    <label>Vehículo *</label>
+                    <select id="orderVehicle" required>
+                        <option value="">Seleccione vehículo...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción del Problema *</label>
+                    <textarea id="problemDesc" rows="3" required placeholder="Describa el problema reportado..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Fecha de Recepción</label>
+                        <input type="datetime-local" id="receptionDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Prioridad</label>
+                        <select id="priority">
+                            <option value="normal">Normal</option>
+                            <option value="urgente">Urgente</option>
+                            <option value="alta">Alta</option>
+                            <option value="baja">Baja</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Observaciones</label>
+                    <textarea id="orderObservations" rows="2" placeholder="Observaciones adicionales..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeOrderModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Crear Orden</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para ver detalle de orden -->
+    <div id="orderDetailModal" class="modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Detalle de Orden</h3>
+                <button class="close-modal" onclick="closeDetailModal()">&times;</button>
+            </div>
+            <div id="orderDetailContent" class="order-detail">
+                <!-- Contenido cargado por JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
